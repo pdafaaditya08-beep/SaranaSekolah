@@ -17,7 +17,7 @@ class SiswaController extends Controller
             ->latest()
             ->get();
 
-        $user = Auth::user(); // ambil data user (nis & kelas)
+        $user = Auth::user();
 
         return view('siswa.dashboard', compact('aspirasi', 'user'));
     }
@@ -60,8 +60,24 @@ class SiswaController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        $user = Auth::user(); // ambil NIS & kelas
+        $user = Auth::user();
 
         return view('siswa.detail_aspirasi', compact('aspirasi', 'user'));
+    }
+
+    // =========================
+    // HAPUS ASPIRASI (BARU)
+    // =========================
+    public function destroy($id)
+    {
+        $aspirasi = Aspirasi::where('user_id', Auth::id())
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $aspirasi->delete();
+
+        return redirect()
+            ->route('siswa.dashboard')
+            ->with('success', 'Aspirasi berhasil dihapus.');
     }
 }

@@ -11,109 +11,53 @@
             padding: 20px;
         }
 
-```
-    h1 {
-        margin-bottom: 5px;
-    }
+        h1 {
+            margin-bottom: 5px;
+        }
 
-    .container {
-        max-width: 1100px;
-        margin: auto;
-    }
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
 
-    .card {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
 
-    form label {
-        display: block;
-        margin-top: 10px;
-        font-size: 14px;
-    }
+        table th {
+            background: #007bff;
+            color: white;
+        }
 
-    form input, form select {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
+        table th, table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
 
-    .form-row {
-        display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
-    }
+        table tr:hover {
+            background: #f1f1f1;
+        }
 
-    .form-group {
-        flex: 1;
-        min-width: 200px;
-    }
+        button {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: red;
+            color: white;
+        }
 
-    button {
-        margin-top: 15px;
-        padding: 10px 15px;
-        border: none;
-        background: #007bff;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background: #0056b3;
-    }
-
-    .btn-reset {
-        background: gray;
-        text-decoration: none;
-        padding: 10px 15px;
-        color: white;
-        border-radius: 5px;
-        margin-left: 10px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    table th {
-        background: #007bff;
-        color: white;
-    }
-
-    table th, table td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        text-align: left;
-    }
-
-    table tr:hover {
-        background: #f1f1f1;
-    }
-
-    .menu a {
-        text-decoration: none;
-        color: #007bff;
-    }
-
-    .logout {
-        margin-top: 15px;
-        display: inline-block;
-        color: red;
-        cursor: pointer;
-    }
-</style>
-```
-
+        button:hover {
+            background: darkred;
+        }
+    </style>
 </head>
+
 <body>
-    <div class="container">
+<div class="container">
 
 <h1>Dashboard Siswa</h1>
 <p>Selamat datang, {{ Auth::user()->name }}</p>
@@ -125,6 +69,7 @@
 @endif
 
 <h3>Daftar Aspirasi Anda</h3>
+
 <table border="1" cellpadding="8">
     <tr>
         <th>No</th>
@@ -134,6 +79,7 @@
         <th>Tanggal</th>
         <th>Aksi</th>
     </tr>
+
     @foreach($aspirasi as $index => $a)
     <tr>
         <td>{{ $index + 1 }}</td>
@@ -141,17 +87,37 @@
         <td>{{ optional($a->kategori)->nama_kategori ?? 'Kategori tidak ditemukan' }}</td>
         <td>{{ $a->status }}</td>
         <td>{{ $a->created_at->format('d-m-Y') }}</td>
+
         <td>
+            
             <a href="{{ route('siswa.aspirasi.detail', $a->id) }}">Detail</a>
+
+            
+            <form action="{{ route('siswa.aspirasi.destroy', $a->id) }}"
+                  method="POST"
+                  style="display:inline;"
+                  onsubmit="return confirm('Yakin ingin menghapus aspirasi ini?')">
+                @csrf
+                @method('DELETE')
+
+                <button type="submit">Hapus</button>
+            </form>
         </td>
     </tr>
     @endforeach
 </table>
 
 <p>
-    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+    <a href="{{ route('logout') }}"
+       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+       Logout
+    </a>
 </p>
 
 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
     @csrf
 </form>
+
+</div>
+</body>
+</html>

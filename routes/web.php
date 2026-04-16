@@ -30,4 +30,5 @@ Route::prefix('siswa')->group(function () {
     Route::get('/aspirasi/create',[SiswaController::class,'createAspirasi'])->name('siswa.aspirasi.create');
     Route::post('aspirasi',[SiswaController::class,'storeAspirasi'])->name('siswa.aspirasi.store');
     Route::get('/aspirasi/{id}',[SiswaController::class,'detailAspirasi'])->name('siswa.aspirasi.detail');
+    Route::delete('/siswa/aspirasi/{id}', [SiswaController::class, 'destroy'])->name('siswa.aspirasi.destroy');
 });
